@@ -79,3 +79,7 @@ Add `--demo` to any command to try it against an emulated keyboard.
   still work.
 
 Development: `python3 -m unittest -v tests/test_akkoctl.py`
+
+## License
+
+MIT. See [LICENSE](LICENSE).
