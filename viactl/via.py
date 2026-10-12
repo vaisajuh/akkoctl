@@ -1,4 +1,4 @@
-"""VIA raw-HID protocol for the Akko 5075B Plus-S (and other VIA keyboards).
+"""VIA raw-HID protocol for VIA keyboards (tested on the Akko 5075B Plus-S).
 
 The keyboard exposes a vendor HID interface (usage page 0xFF60, usage 0x61)
 that takes 32-byte command packets. This module finds that interface through
@@ -162,7 +162,7 @@ class Keyboard:
         if path is None:
             if not devices:
                 raise ViaError(
-                    "No VIA keyboard found. Make sure the Akko is connected "
+                    "No VIA keyboard found. Make sure the keyboard is connected "
                     "by USB cable and switched to wired mode.")
             path = devices[0]["path"]
         pid = next((d["pid"] for d in devices if d["path"] == path), None)

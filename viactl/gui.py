@@ -195,7 +195,7 @@ class LightingPanel(Gtk.Grid):
 
 class App(Gtk.Window):
     def __init__(self, demo=False, device=None, layout=None):
-        super().__init__(title="Akko Keyboard Control")
+        super().__init__(title="VIA Keyboard Control")
         self.set_default_size(1020, 660)
         self.demo, self.device, self.layout = demo, device, layout
         self.kb = None
@@ -206,7 +206,7 @@ class App(Gtk.Window):
             Gdk.Screen.get_default(), provider,
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
-        header = Gtk.HeaderBar(show_close_button=True, title="Akko Keyboard Control")
+        header = Gtk.HeaderBar(show_close_button=True, title="VIA Keyboard Control")
         self.set_titlebar(header)
         self.stack = Gtk.Stack(transition_type=Gtk.StackTransitionType.CROSSFADE)
         header.set_custom_title(Gtk.StackSwitcher(stack=self.stack))
