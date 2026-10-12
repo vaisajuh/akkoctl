@@ -1,5 +1,7 @@
 # akkoctl — Akko 5075B Plus-S control for Linux
 
+[![Tests](https://github.com/vaisajuh/akkoctl/actions/workflows/tests.yml/badge.svg)](https://github.com/vaisajuh/akkoctl/actions/workflows/tests.yml)
+
 Controls RGB lighting, key remapping and macros on the Akko 5075B Plus-S
 (USB `342d:e4f6`) through its VIA interface. It also works with other Akko/VIA
 keyboards that use QMK RGB-matrix lighting. It needs only Python 3 and, for
@@ -103,11 +105,33 @@ Development: `python3 -m unittest -v tests/test_akkoctl.py`
 - **Tests** run against `fake.py`, an in-memory keyboard that speaks the same
   packet protocol, which is also what `--demo` uses.
 
+## Contributing
+
+Bug reports and pull requests are welcome.
+
+- Report bugs and ask questions in [issues](https://github.com/vaisajuh/akkoctl/issues).
+- Run the tests before opening a pull request: `python3 -m unittest -v tests/test_akkoctl.py`.
+  They use an emulated device, so no hardware is needed, and they also run
+  automatically on every pull request.
+- Use only the Python standard library (no third-party dependencies).
+- `akkoctl/via.py`, `akkoctl/fake.py` are also bundled in
+  [clcr](https://github.com/vaisajuh/clcr), the Computer Lighting Control
+  Center. You don't need to change clcr yourself: after your pull request is
+  merged here, clcr's nightly sync opens a pull request there with the change.
+  If you change functions or classes in these files, say so in your pull
+  request, since clcr's GUI uses them.
+- Want to add a different device or brand? See clcr's
+  [CONTRIBUTING.md](https://github.com/vaisajuh/clcr/blob/main/CONTRIBUTING.md#adding-a-new-device).
+
+## Maintainer
+
+Maintained by **Juha Väisänen** ([@vaisajuh](https://github.com/vaisajuh)).
+
 ## Related projects
 
 Part of a small set of Linux lighting tools, all pure Python with no third-party dependencies:
 
-- [clcr](https://github.com/vaisajuh/clcr): Lighting Control Center: one tkinter desktop app for all three devices below (bundles their drivers)
+- [clcr](https://github.com/vaisajuh/clcr): Computer Lighting Control Center, one desktop app for lighting across brands and devices (bundles the drivers below)
 - **akkoctl** (this repo): Akko 5075B Plus-S keyboard: RGB backlight, sidelights, keymap and macros
 - [caselight](https://github.com/vaisajuh/caselight): ASUS Aura USB controller: motherboard and ARGB header lighting
 - [logiled](https://github.com/vaisajuh/logiled): Logitech G502 HERO mouse: lighting, DPI, polling rate and onboard mode
