@@ -80,6 +80,38 @@ Add `--demo` to any command to try it against an emulated keyboard.
 
 Development: `python3 -m unittest -v tests/test_akkoctl.py`
 
+## How it's built
+
+- **Finding the keyboard.** `via.py` scans `/sys/class/hidraw/*` and reads each
+  device's HID report descriptor, looking for VIA's raw-HID interface (usage
+  page `0xFF60`, usage `0x61`). Akko boards (`342d`) are preferred, but any VIA
+  keyboard is found the same way.
+- **Talking to it.** The VIA protocol is 32-byte request packets written to
+  `/dev/hidrawN`, each answered by a 32-byte reply. No libusb or hidapi is
+  needed, only `os.read`/`os.write` and `select` for timeouts.
+- **Lighting** uses VIA's custom-value commands (`0x07` set, `0x08` get,
+  `0x09` save to EEPROM). Per-key backlight is QMK's RGB-matrix channel (3);
+  the side strip answers on the rgblight channel (2). Colors are QMK hue and
+  saturation, converted from/to RGB.
+- **Keymap** is read in bulk with the dynamic-keymap buffer commands in
+  28-byte chunks. `keycodes.py` turns 16-bit QMK keycodes into names
+  (`KC_A`, `LT(1,KC_SPC)`, …) and back, taking the VIA protocol version into
+  account. `layout.py` holds the physical layout the GUI draws.
+- **Macros** (`macros.py`) are encoded into VIA's shared macro buffer:
+  NUL-separated strings with escape codes for tap, press, release and delay.
+- **Front ends:** `cli.py` (argparse) and `gui.py` (GTK 3 via PyGObject).
+- **Tests** run against `fake.py`, an in-memory keyboard that speaks the same
+  packet protocol, which is also what `--demo` uses.
+
+## Related projects
+
+Part of a small set of Linux lighting tools, all pure Python with no third-party dependencies:
+
+- [clcr](https://github.com/vaisajuh/clcr): Lighting Control Center: one tkinter desktop app for all three devices below (bundles their drivers)
+- **akkoctl** (this repo): Akko 5075B Plus-S keyboard: RGB backlight, sidelights, keymap and macros
+- [caselight](https://github.com/vaisajuh/caselight): ASUS Aura USB controller: motherboard and ARGB header lighting
+- [logiled](https://github.com/vaisajuh/logiled): Logitech G502 HERO mouse: lighting, DPI, polling rate and onboard mode
+
 ## License
 
 MIT. See [LICENSE](LICENSE).
