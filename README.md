@@ -1,11 +1,23 @@
-# akkoctl — Akko 5075B Plus-S control for Linux
+# viactl: VIA keyboard control for Linux
 
-[![Tests](https://github.com/vaisajuh/akkoctl/actions/workflows/tests.yml/badge.svg)](https://github.com/vaisajuh/akkoctl/actions/workflows/tests.yml)
+[![Tests](https://github.com/vaisajuh/viactl/actions/workflows/tests.yml/badge.svg)](https://github.com/vaisajuh/viactl/actions/workflows/tests.yml)
 
-Controls RGB lighting, key remapping and macros on the Akko 5075B Plus-S
-(USB `342d:e4f6`) through its VIA interface. It also works with other Akko/VIA
-keyboards that use QMK RGB-matrix lighting. It needs only Python 3 and, for
+Controls RGB lighting, key remapping and macros on keyboards that support
+**VIA**, the open configuration protocol of QMK firmware used by Akko,
+Keychron, Glorious, KBDfans and many others. It needs only Python 3 and, for
 the GUI, GTK 3 (`python3-gi`), both already on most Linux desktops.
+
+*viactl was called akkoctl until October 2026. The old name still works as a
+command, and old GitHub links redirect here.*
+
+| Keyboard | Status |
+| --- | --- |
+| Akko 5075B Plus-S (`342d:e4f6`) | ✅ Tested by maintainer, including Akko's sidelights and custom keys |
+| Other VIA keyboards with QMK RGB-matrix lighting | 🟡 Untested: same protocol, should work |
+
+Tried another keyboard? Please [report how it went](https://github.com/vaisajuh/viactl/issues),
+so it can be added to the table. Device support grows through test reports
+from people who own the hardware.
 
 The keyboard must be connected **by USB cable in wired mode**. VIA control
 does not work over Bluetooth or 2.4G.
@@ -17,14 +29,18 @@ does not work over Bluetooth or 2.4G.
 ```
 
 This installs a udev rule so your user can access the keyboard without root
-(it asks for your sudo password), adds an `akkoctl` command in
-`~/.local/bin`, and adds "Akko Keyboard Control" to the app menu.
+(it asks for your sudo password), adds a `viactl` command in
+`~/.local/bin`, and adds "VIA Keyboard Control" to the app menu.
 Unplug and replug the keyboard afterwards.
+
+The udev rule covers Akko keyboards. For another brand, add a line with your
+keyboard's USB vendor ID to `70-viactl.rules` (see the comment in it) and run
+`./install.sh` again.
 
 ## GUI
 
 ```sh
-akkoctl gui
+viactl gui
 ```
 
 The GUI has five tabs:
@@ -39,30 +55,30 @@ The GUI has five tabs:
 ## CLI
 
 ```sh
-akkoctl info                                   # firmware + current lighting
-akkoctl effects                                # list the 46 effects
-akkoctl set --effect breathing --color '#00aaff'
-akkoctl set -b 40% -s 80%                      # brightness / speed
-akkoctl set --effect "solid reactive" -c red
-akkoctl set --off
-akkoctl set -c purple --temp                   # don't save to EEPROM
+viactl info                                   # firmware + current lighting
+viactl effects                                # list the 46 effects
+viactl set --effect breathing --color '#00aaff'
+viactl set -b 40% -s 80%                      # brightness / speed
+viactl set --effect "solid reactive" -c red
+viactl set --off
+viactl set -c purple --temp                   # don't save to EEPROM
 
-akkoctl effects --side                         # sidelight effects
-akkoctl set --side --effect "rainbow swirl 3"  # any `set` option works with --side
-akkoctl set --side -c '#ff0000' -b 60%
-akkoctl set --side --off
-akkoctl status --side
+viactl effects --side                         # sidelight effects
+viactl set --side --effect "rainbow swirl 3"  # any `set` option works with --side
+viactl set --side -c '#ff0000' -b 60%
+viactl set --side --off
+viactl status --side
 
-akkoctl keymap --layer 0
-akkoctl remap 0 3 0 KC_LCTL                    # layer 0, row 3, col 0 (Caps) -> Ctrl
-akkoctl remap 1 0 1 KC_MPLY                    # Fn+F1 -> play/pause
+viactl keymap --layer 0
+viactl remap 0 3 0 KC_LCTL                    # layer 0, row 3, col 0 (Caps) -> Ctrl
+viactl remap 1 0 1 KC_MPLY                    # Fn+F1 -> play/pause
 
-akkoctl macro                                  # list macros
-akkoctl macro 0 'git status{KC_ENT}'
-akkoctl macro 1 '{+KC_LCTL}{KC_C}{-KC_LCTL}{50ms}copied'
-akkoctl remap 1 0 12 M0                        # Fn+F12 types macro 0
+viactl macro                                  # list macros
+viactl macro 0 'git status{KC_ENT}'
+viactl macro 1 '{+KC_LCTL}{KC_C}{-KC_LCTL}{50ms}copied'
+viactl remap 1 0 12 M0                        # Fn+F12 types macro 0
 
-akkoctl reset keymap --yes                     # or: macros | everything
+viactl reset keymap --yes                     # or: macros | everything
 ```
 
 Keycodes can be written as `KC_A`, `A`, `ESC`, `MO(1)`, `TG(2)`, `LCTL(KC_C)`,
@@ -73,14 +89,15 @@ Add `--demo` to any command to try it against an emulated keyboard.
 
 ## Troubleshooting
 
-- **"Permission denied"**: run `./install.sh` and replug the keyboard.
+- **"Permission denied"**: run `./install.sh` and replug the keyboard. Not an
+  Akko? Add your vendor ID to `70-viactl.rules` first (see Setup).
 - **"No VIA keyboard found" / "did not answer"**: switch the keyboard to
   wired/USB mode (see the keyboard's manual) and use a data-capable USB cable.
 - **"does not support command …"**: the firmware doesn't implement that
   VIA feature. Lighting and keymap commands are separate, so the others
   still work.
 
-Development: `python3 -m unittest -v tests/test_akkoctl.py`
+Development: `python3 -m unittest -v tests/test_viactl.py`
 
 ## How it's built
 
@@ -109,12 +126,12 @@ Development: `python3 -m unittest -v tests/test_akkoctl.py`
 
 Bug reports and pull requests are welcome.
 
-- Report bugs and ask questions in [issues](https://github.com/vaisajuh/akkoctl/issues).
-- Run the tests before opening a pull request: `python3 -m unittest -v tests/test_akkoctl.py`.
+- Report bugs and ask questions in [issues](https://github.com/vaisajuh/viactl/issues).
+- Run the tests before opening a pull request: `python3 -m unittest -v tests/test_viactl.py`.
   They use an emulated device, so no hardware is needed, and they also run
   automatically on every pull request.
 - Use only the Python standard library (no third-party dependencies).
-- `akkoctl/via.py`, `akkoctl/fake.py` are also bundled in
+- `viactl/via.py`, `viactl/fake.py` are also bundled in
   [clcr](https://github.com/vaisajuh/clcr), the Computer Lighting Control
   Center. You don't need to change clcr yourself: after your pull request is
   merged here, clcr's nightly sync opens a pull request there with the change.
@@ -132,8 +149,8 @@ Maintained by **Juha Väisänen** ([@vaisajuh](https://github.com/vaisajuh)).
 Part of a small set of Linux lighting tools, all pure Python with no third-party dependencies:
 
 - [clcr](https://github.com/vaisajuh/clcr): Computer Lighting Control Center, one desktop app for lighting across brands and devices (bundles the drivers below)
-- **akkoctl** (this repo): Akko 5075B Plus-S keyboard: RGB backlight, sidelights, keymap and macros
-- [caselight](https://github.com/vaisajuh/caselight): ASUS Aura USB controller: motherboard and ARGB header lighting
+- **viactl** (this repo): VIA/QMK keyboards (tested on Akko 5075B Plus-S): RGB backlight, sidelights, keymap and macros
+- [caselight](https://github.com/vaisajuh/caselight): motherboard and case lighting (currently ASUS Aura)
 - [logiled](https://github.com/vaisajuh/logiled): Logitech G502 HERO mouse: lighting, DPI, polling rate and onboard mode
 
 ## License

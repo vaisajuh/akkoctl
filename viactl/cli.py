@@ -1,4 +1,4 @@
-"""Command-line interface: `akkoctl <command> ...`"""
+"""Command-line interface: `viactl <command> ...`"""
 
 import argparse
 import sys
@@ -27,7 +27,7 @@ def parse_effect(text, effects):
         names = [e.lower().replace(" ", "") for e in effects]
         key = text.lower().replace(" ", "").replace("-", "").replace("_", "")
         if key not in names:
-            raise ValueError(f"unknown effect '{text}' (see `akkoctl effects`)")
+            raise ValueError(f"unknown effect '{text}' (see `viactl effects`)")
         n = names.index(key)
     if not 0 <= n < len(effects):
         raise ValueError(f"effect must be 0-{len(effects) - 1}")
@@ -111,7 +111,7 @@ def cmd_set(kb, args):
         kb.set_effect(0, channel)
         changed = True
     if not changed:
-        sys.exit("Nothing to set. Try e.g.  akkoctl set --effect breathing --color red")
+        sys.exit("Nothing to set. Try e.g.  viactl set --effect breathing --color red")
     if not args.temp:
         kb.save_lighting(channel)
     cmd_status(kb, args)
@@ -146,7 +146,7 @@ def cmd_macro(kb, args):
     if args.index is None:
         for i, text in enumerate(current):
             print(f"M{i:<3} {text!r}" if text else f"M{i:<3} (empty)")
-        print("\nAssign macro N to a key with: akkoctl remap LAYER ROW COL MN")
+        print("\nAssign macro N to a key with: viactl remap LAYER ROW COL MN")
         return
     if not 0 <= args.index < count:
         sys.exit(f"Macro index must be 0-{count - 1}")
@@ -165,9 +165,9 @@ def cmd_reset(kb, args):
 
 def build_parser():
     p = argparse.ArgumentParser(
-        prog="akkoctl",
-        description="Control lighting, keymap and macros on an Akko 5075B "
-                    "Plus-S (or any VIA keyboard). Use it with the keyboard "
+        prog="viactl",
+        description="Control lighting, keymap and macros on VIA keyboards "
+                    "(tested on the Akko 5075B Plus-S). Use it with the keyboard "
                     "connected by USB in wired mode.")
     p.add_argument("--device", help="hidraw path (default: auto-detect)")
     p.add_argument("--demo", action="store_true",
@@ -186,9 +186,9 @@ def build_parser():
     s.add_argument("--side", action="store_true", help="sidelight effects")
 
     s = sub.add_parser("set", help="change lighting",
-                       epilog="Examples:\n  akkoctl set --effect breathing --color '#00aaff'\n"
-                              "  akkoctl set -b 40%% -s 80%%\n  akkoctl set --off\n"
-                              "  akkoctl set --side --effect 'rainbow swirl 3'",
+                       epilog="Examples:\n  viactl set --effect breathing --color '#00aaff'\n"
+                              "  viactl set -b 40%% -s 80%%\n  viactl set --off\n"
+                              "  viactl set --side --effect 'rainbow swirl 3'",
                        formatter_class=argparse.RawDescriptionHelpFormatter)
     s.add_argument("--side", action="store_true",
                    help="change the sidelights instead of the key backlight")
@@ -206,8 +206,8 @@ def build_parser():
     s = sub.add_parser("remap", help="change what a key does",
                        epilog="KEYCODE can be KC_A, ESC, MO(1), LCTL(KC_C), "
                               "LT(1,KC_SPC), M0 (macro), BT_DEV1, or hex like 0x0004.\n"
-                              "Find ROW/COL with `akkoctl gui` (hover a key) "
-                              "or `akkoctl keymap`.",
+                              "Find ROW/COL with `viactl gui` (hover a key) "
+                              "or `viactl keymap`.",
                        formatter_class=argparse.RawDescriptionHelpFormatter)
     s.add_argument("layer", type=int)
     s.add_argument("row", type=int)

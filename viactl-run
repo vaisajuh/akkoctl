@@ -1,0 +1,4 @@
+#!/bin/sh
+# Launcher: runs viactl from wherever this repo lives.
+DIR="$(dirname "$(readlink -f "$0")")"
+exec env PYTHONPATH="$DIR${PYTHONPATH:+:$PYTHONPATH}" python3 -m viactl "$@"

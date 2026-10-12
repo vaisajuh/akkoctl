@@ -1,2 +1,0 @@
-# Let the logged-in user talk to Akko keyboards' VIA interface without root.
-KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="342d", MODE="0660", TAG+="uaccess"

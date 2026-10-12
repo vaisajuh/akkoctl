@@ -1,0 +1,4 @@
+# Let the logged-in user talk to VIA keyboards without root.
+# Akko keyboards (342d) are listed. For another brand, add a line with its
+# USB vendor ID (the first half of the ID shown by `lsusb`) and reinstall.
+KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="342d", MODE="0660", TAG+="uaccess"

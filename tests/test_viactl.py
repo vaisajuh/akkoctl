@@ -1,10 +1,10 @@
 import unittest
 
-from akkoctl import macros, via
-from akkoctl.cli import main
-from akkoctl.fake import FakeTransport
-from akkoctl.keycodes import Keycodes
-from akkoctl.layout import ANSI, ISO, layout_for
+from viactl import macros, via
+from viactl.cli import main
+from viactl.fake import FakeTransport
+from viactl.keycodes import Keycodes
+from viactl.layout import ANSI, ISO, layout_for
 
 
 class ProtocolTest(unittest.TestCase):
